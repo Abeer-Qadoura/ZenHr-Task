@@ -1,14 +1,19 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.mongodb.assertions.Assertions;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
+
 
 public class zenhr {
 
@@ -23,11 +28,10 @@ public class zenhr {
 		driver = new ChromeDriver();
 
 		driver.manage().window().maximize();
-		//Open the link: https://zenhr-master.staging2.devops.zenhr.com/
+		// Open the link: https://zenhr-master.staging2.devops.zenhr.com/
 		driver.get("https://zenhr-master.staging2.devops.zenhr.com");
 
-		
-		//Login using username: tillawy@hotmail.com / password: password 
+		// Login using username: tillawy@hotmail.com / password: password
 		driver.findElement(By.linkText("Log in")).click();
 		driver.findElement(By.name("user[login]")).sendKeys("tillawy@hotmail.com");
 		driver.findElement(By.name("user[password]")).sendKeys("password");
@@ -38,7 +42,6 @@ public class zenhr {
 		// Storing the links in a list .....
 		List<WebElement> links = leftSideMenu.findElements(By.tagName("a"));
 		System.out.println("No of links are " + links.size());
-
 		// checking the links fetched.
 		for (int i = 0; i < links.size(); i++) {
 			WebElement E1 = links.get(i);
@@ -50,6 +53,8 @@ public class zenhr {
 	}
 
 	public static void verifyLinks(String linkUrl) {
+		List<Integer> BrokenList = new ArrayList<>();
+
 		try {
 			URL url = new URL(linkUrl);
 
@@ -58,7 +63,10 @@ public class zenhr {
 			httpURLConnect.setConnectTimeout(5000);
 			httpURLConnect.connect();
 			if (httpURLConnect.getResponseCode() == 404) {
+
+				int st3 = httpURLConnect.getResponseCode();
 				System.out.println(linkUrl + " - " + httpURLConnect.getResponseMessage() + "is a broken link");
+				BrokenList.add(st3);
 			}
 
 			// Fetching and Printing the response code obtained
@@ -67,5 +75,6 @@ public class zenhr {
 			}
 		} catch (Exception e) {
 		}
+		Assert.assertFalse(BrokenList.size() > 0);
 	}
 }
