@@ -18,6 +18,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class zenhr {
 
 	public static WebDriver driver;
+	public static List<Integer> BrokenList = new ArrayList<>();
 
 	@Test(priority = 1)
 
@@ -43,6 +44,7 @@ public class zenhr {
 		List<WebElement> links = leftSideMenu.findElements(By.tagName("a"));
 		System.out.println("No of links are " + links.size());
 		// checking the links fetched.
+		
 		for (int i = 0; i < links.size(); i++) {
 			WebElement E1 = links.get(i);
 			String url = E1.getAttribute("href");
@@ -53,7 +55,7 @@ public class zenhr {
 	}
 
 	public static void verifyLinks(String linkUrl) {
-		List<Integer> BrokenList = new ArrayList<>();
+		//List<Integer> BrokenList = new ArrayList<>();
 
 		try {
 			URL url = new URL(linkUrl);
@@ -67,6 +69,8 @@ public class zenhr {
 				int st3 = httpURLConnect.getResponseCode();
 				System.out.println(linkUrl + " - " + httpURLConnect.getResponseMessage() + "is a broken link");
 				BrokenList.add(st3);
+				Assert.assertFalse(BrokenList.size() > 0);
+				
 			}
 
 			// Fetching and Printing the response code obtained
