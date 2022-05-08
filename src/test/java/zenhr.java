@@ -57,7 +57,7 @@ public class zenhr {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//a[@class='user-menu__item__link '])[9]")));
 		driver.findElement(By.xpath("(//a[@class='user-menu__item__link '])[9]")).click();
-
+		Assert.assertFalse(BrokenList.size() > 0);
 		driver.quit();
 	}
 
@@ -85,6 +85,7 @@ public class zenhr {
 			}
 		} catch (Exception e) {
 		}
-		Assert.assertFalse(BrokenList.size() > 0);
+
 	}
+
 }
